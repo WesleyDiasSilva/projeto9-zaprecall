@@ -2,14 +2,57 @@ import '../src/assets/css/style.css'
 import styled from 'styled-components';
 import Flashcard from './components/Flashcard';
 import logo from '../src/assets/img/logo.png'
+import React from 'react';
 
 function App() {
 
+  let [btnResposta, setBtnResposta] = React.useState(true)
+  let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
+  let [lembradas, setLembradas] = React.useState(0);
+  let [podeAbrirPergunta, setPodeAbrirPergunta] = React.useState(true);
 
   const corVerde =  'var(--cor-zap)'
   const corVermelha = 'var(--cor-nao-lembrei)'
   const corAmarela = 'var(--cor-quase-nao-lembrei)'
 
+  const flashs = [
+    {
+      pergunta: 'O que é JSX?',
+      resposta:'Uma extensão de linguagem JavaScript',
+      categoria: 'react'
+    },
+    {
+      pergunta: 'O React é?',
+      resposta:'uma biblioteca JavaScript para construção de interfaces',
+      categoria: 'react'
+    },
+    {
+      pergunta: 'Componentes devem iniciar com?',
+      resposta:'letra maiúscula',
+      categoria: 'react'
+    },
+    {
+      pergunta: 'Podemos colocar __ dentro do JSX?',
+      resposta:'expressões',
+      categoria: 'react'
+    },
+    {
+      pergunta: 'O ReactDOM nos ajuda __?',
+      resposta:'interagindo com a DOM para colocar componentes React na mesma',
+      categoria: 'react'
+    },
+  ]
+
+  function habilitaBtnResposta(){
+    setBtnResposta(false)
+  }
+
+  function respondeu(escolha){
+    setLembradas(lembradas + 1)
+    setPodeAbrirPergunta(!podeAbrirPergunta)
+    setPerguntaHabilitada(true)
+    setBtnResposta(true)
+  }
 
   return (
     <div>
@@ -18,19 +61,21 @@ function App() {
           <img src={logo} alt='Logo do zaprecall'></img>
           <h1>ZapRecall</h1>
         </ContainerCabecalho>
-      <Flashcard />
-      <Flashcard />
-      <Flashcard />
+
+        {flashs.map((f, index) => <Flashcard podeAbrirPergunta={podeAbrirPergunta} setPodeAbrirPergunta={setPodeAbrirPergunta} habilitaBtnResposta={habilitaBtnResposta} btnResposta={btnResposta} 
+        setBtnResposta={setBtnResposta}perguntaHabilitada={perguntaHabilitada} setPerguntaHabilitada={setPerguntaHabilitada} key={index} pergunta={f.pergunta} resposta={f.resposta} categoria={f.categoria} index={index}/>)}
+      
+
       </Home>
       <Footer>
       <Action>
-        <Button cor={corVermelha}>Não lembrei</Button>
-        <Button cor={corAmarela}>Quase não lembrei</Button>
-        <Button cor={corVerde}>Zap</Button>
+        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corVermelha}>Não lembrei</Button>
+        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corAmarela}>Quase não lembrei</Button>
+        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corVerde}>Zap</Button>
       </Action>
       <div>
-        <span>1</span>
-        <span>/4 CONCLUÍDO</span>
+        <span>{lembradas}</span>
+        <span>/{flashs.length} CONCLUÍDO</span>
       </div>
       </Footer>
     </div>
@@ -60,6 +105,9 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   border: none;
+  &:hover{
+    filter: brightness(0.7)
+  }
 `
 
 const ContainerCabecalho = styled.div`

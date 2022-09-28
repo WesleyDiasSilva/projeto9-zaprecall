@@ -76,19 +76,19 @@ body {
   align-items: center;
 }
 
-.aberto img {
+/* .aberto img {
   cursor: pointer;
-}
+} */
 
-.action {
+/* .action {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
   gap: 10px;
-}
+} */
 
-.button {
+/* .button {
   width: 100%;
   height: 40px;
   background-color: green;
@@ -100,9 +100,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
-.button:hover {
+/* .button:hover {
   filter: brightness(0.7)
 }
 .button.error {
@@ -115,15 +115,15 @@ body {
 
 .button.zap {
   background-color: var(--cor-zap);
-}
+} */
 
 
-.icone,
+/* .icone,
 img.icone {
   color: var(--preto);
   width: 23px;
   height: 23px;
-}
+} */
 
 /* .icone svg {
   width: 23px;
