@@ -6,14 +6,13 @@ import React from 'react';
 
 function App() {
 
+  
   let [btnResposta, setBtnResposta] = React.useState(true)
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
   let [lembradas, setLembradas] = React.useState(0);
   let [podeAbrirPergunta, setPodeAbrirPergunta] = React.useState(true);
 
-  const corVerde =  'var(--cor-zap)'
-  const corVermelha = 'var(--cor-nao-lembrei)'
-  const corAmarela = 'var(--cor-quase-nao-lembrei)'
+  
 
   const flashs = [
     {
@@ -47,12 +46,7 @@ function App() {
     setBtnResposta(false)
   }
 
-  function respondeu(escolha){
-    setLembradas(lembradas + 1)
-    setPodeAbrirPergunta(!podeAbrirPergunta)
-    setPerguntaHabilitada(true)
-    setBtnResposta(true)
-  }
+  
 
   return (
     <div>
@@ -62,17 +56,21 @@ function App() {
           <h1>ZapRecall</h1>
         </ContainerCabecalho>
 
-        {flashs.map((f, index) => <Flashcard podeAbrirPergunta={podeAbrirPergunta} setPodeAbrirPergunta={setPodeAbrirPergunta} habilitaBtnResposta={habilitaBtnResposta} btnResposta={btnResposta} 
-        setBtnResposta={setBtnResposta}perguntaHabilitada={perguntaHabilitada} setPerguntaHabilitada={setPerguntaHabilitada} key={index} pergunta={f.pergunta} resposta={f.resposta} categoria={f.categoria} index={index}/>)}
-      
-
+        {flashs.map((f, index) => <Flashcard 
+          lembradas={lembradas} 
+          setLembradas={setLembradas} 
+          habilitaBtnResposta={habilitaBtnResposta} 
+          btnResposta={btnResposta} 
+          setBtnResposta={setBtnResposta}
+          perguntaHabilitada={perguntaHabilitada} 
+          setPerguntaHabilitada={setPerguntaHabilitada} 
+          key={index} 
+          pergunta={f.pergunta} 
+          resposta={f.resposta} 
+          categoria={f.categoria} 
+          index={index}/>)}
       </Home>
       <Footer>
-      <Action>
-        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corVermelha}>Não lembrei</Button>
-        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corAmarela}>Quase não lembrei</Button>
-        <Button onClick={({target}) => respondeu(target.innerText)} disabled={btnResposta} cor={corVerde}>Zap</Button>
-      </Action>
       <div>
         <span>{lembradas}</span>
         <span>/{flashs.length} CONCLUÍDO</span>
@@ -84,31 +82,7 @@ function App() {
 
 export default App;
 
-const Action = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  gap: 10px;
-`
 
-const Button = styled.button`
-  width: 100%;
-  height: 40px;
-  background-color: ${props => props.cor};
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  &:hover{
-    filter: brightness(0.7)
-  }
-`
 
 const ContainerCabecalho = styled.div`
   display: flex;
