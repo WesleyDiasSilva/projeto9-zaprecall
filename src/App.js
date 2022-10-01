@@ -206,43 +206,43 @@ const Home = styled.div`
 const EntradaNotificao = keyframes`
   
   10%{
-    right: -90px;
+    right: -80px;
     transform: initial;
   }
 
   20%{
-    right: -110px;
+    right: -100px;
     transform: initial;
   }
 
   30%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
 
   40%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
 
   50%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
 
   60%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
 
   70%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
   
   
   90%{
-    right: -100px;
+    right: -90px;
     transform: initial;
   }
 
