@@ -4,6 +4,10 @@ import Flashcard from './components/Flashcard';
 import logo from '../src/assets/img/logo.png'
 import React from 'react';
 import TelaInicial from './components/TelaInicial';
+import check from '../src/assets/img/check.svg'
+import close from '../src/assets/img/close.svg'
+import help from '../src/assets/img/help.svg'
+
 
 
 function App() {
@@ -12,9 +16,14 @@ function App() {
   let [btnResposta, setBtnResposta] = React.useState(true)
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
   let [lembradas, setLembradas] = React.useState(0);
-  let [metaDeZap, setMetaDeZap]  = React.useState(0)
-  let [valueSelect, setValueSelect]  = React.useState('')
+  let [metaDeZap, setMetaDeZap]  = React.useState(0);
+  let [valueSelect, setValueSelect]  = React.useState('');
+  let [temErro, setTemErro] = React.useState(false);
+  let [erro, setErro] = React.useState('')
+  let [fila, setFila] = React.useState([])
   
+  const filaRenderizada = []
+
   const flashs = [
     {
       pergunta: 'O que é JSX?',
@@ -51,8 +60,20 @@ function App() {
   function habilitaBtnResposta(){
     setBtnResposta(false)
   }
-
+  fila.forEach((item) => {
+    if(item === 'Zap'){
+      filaRenderizada.push(<img src={check} alt="Zap"/>)
+    }
+    if(item === 'Help'){
+      filaRenderizada.push(<img src={help} alt='Quase não lembrei'/>)
+    }
+    if(item === 'Close'){
+      filaRenderizada.push(<img src={close} alt='Errei'/>)
+    }
+  })
   
+
+
   return (
     <div>
       <Home>
@@ -71,6 +92,8 @@ function App() {
         </ContainerCabecalho> : ''}
         {flashs.filter(f => f.categoria === valueSelect).map((f, index) => 
         renderizarFlashs ? <Flashcard 
+          fila={fila}
+          setFila={setFila}
           lembradas={lembradas} 
           setLembradas={setLembradas} 
           habilitaBtnResposta={habilitaBtnResposta} 
@@ -89,6 +112,9 @@ function App() {
         <span>{lembradas}</span>
         <span>/{flashs.filter(f => f.categoria === valueSelect).length} CONCLUÍDO</span>
       </div>
+      <FilaResposta>
+        {filaRenderizada}
+      </FilaResposta>
       </Footer> : ''}
     </div>
   );
@@ -96,7 +122,12 @@ function App() {
 
 export default App;
 
-
+const FilaResposta = styled.div`
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+`
 
 const ContainerCabecalho = styled.div`
   display: flex;

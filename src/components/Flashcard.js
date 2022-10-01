@@ -7,7 +7,7 @@ import help from '../assets/img/help.svg'
 import close from '../assets/img/close.svg'
 
 
-function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, setLembradas, lembradas}) {
+function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, setLembradas, lembradas, fila, setFila}) {
 
   const corVerde =  'var(--cor-zap)'
   const corVermelha = 'var(--cor-nao-lembrei)'
@@ -29,12 +29,30 @@ function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, s
     setButton('true')
     if(escolha === 'Zap'){
       setStyleFlash({color: '#2FBE34', styleLine: 'line-through', src: check})
+      if(fila.length < 4){
+        setFila([...fila, 'Zap'])
+      }else{
+        setFila([...fila.shift()]);
+        setFila([...fila, 'Zap'])
+      }
     }
     if(escolha === 'Quase não lembrei'){
       setStyleFlash({color: '#FF922E', styleLine: 'line-through', src: help})
+      if(fila.length < 4){
+        setFila([...fila, 'Help'])
+      }else{
+        setFila([...fila.shift()]);
+        setFila([...fila, 'Help'])
+      }
     }
     if(escolha === 'Não lembrei'){
       setStyleFlash({color: '#FF3030', styleLine: 'line-through', src: close})
+      if(fila.length < 4){
+        setFila([...fila, 'Close'])
+      }else{
+        setFila([...fila.shift()]);
+        setFila([...fila, 'Close'])
+      }
     }
   }
   

@@ -55,7 +55,6 @@ function TelaInicial({
 
   function renderizarFlashs() {
     setRenderizarFlashs(true);
-    console.log("ok");
   }
 
   function pegaValor(e) {
@@ -64,7 +63,6 @@ function TelaInicial({
 
   function atualizaValorInput(value) {
     valorInput = Number(value);
-    console.log(valorInput);
   }
 
   return (
