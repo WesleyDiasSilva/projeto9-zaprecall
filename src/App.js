@@ -40,17 +40,29 @@ function App() {
 
   const filaRenderizada = [];
 
+  function mensagemErro(msg, code, posicao, tempo=3000) {
+    setNotificacao({
+      msgErro: msg,
+      code: code,
+      status: true,
+      posicao: posicao
+    });
+    setTimeout(() => {
+      setNotificacao({
+        msgErro: "mensagem padrão",
+        code: "code padrão",
+        status: false,
+        posicao: posicao
+      });
+    }, tempo);
+  }
 
   function verificaMeta() {
     console.log(zapadas);
     if (zapadas >= metaDeZap - 1) {
-      setTimeout(() => {
-        alert("Boa garoto");
-      }, 500);
+      setTimeout(mensagemErro('Parabéns, você foi muito bem!','Success','0px', 7000), 500);
     } else {
-      setTimeout(() => {
-        alert("perdeu");
-      }, 500);
+      setTimeout(mensagemErro('Infelizmente você perdeu, tente novamente!', 'Alert', '0px', 7000), 500);
     }
   }
 
@@ -72,7 +84,11 @@ function App() {
   return (
     <div>
         <Home>
-      {notificacao.status && <Notificacao ref={notify} posicao={notificacao.posicao}>{notificacao.msgErro}</Notificacao>}
+      {notificacao.status && <Notificacao
+       ref={notify} 
+       posicao={notificacao.posicao}
+       cor={notificacao.code === 'Alert' ? '#FF922E' : notificacao.code === 'Error' ? '#CE3030' : notificacao.code === 'Success' ? '#2FBE34' : ''}
+       >{notificacao.msgErro}</Notificacao>}
           {!renderizarFlashs && (
             <TelaInicial
               setNotificacao={setNotificacao}
@@ -209,7 +225,7 @@ const EntradaNotificao = keyframes`
 const Notificacao = styled.div`
   width: 250px;
   height: 70px;
-  background-color: #ce3030;
+  background-color: ${props => props.cor};
   color: white;
   position: relative;
   display: flex;

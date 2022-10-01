@@ -36,7 +36,7 @@ function Flashcard({
     src: play,
   });
 
-  function mensagemErro(msg, code, posicao) {
+  function mensagemErro(msg, code, posicao, tempo=3000) {
     setNotificacao({
       msgErro: msg,
       code: code,
@@ -50,7 +50,7 @@ function Flashcard({
         status: false,
         posicao: posicao
       });
-    }, 3000);
+    }, tempo);
   }
 
   function verificaSeTerminou() {

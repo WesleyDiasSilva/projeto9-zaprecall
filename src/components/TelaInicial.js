@@ -22,17 +22,13 @@ function TelaInicial({
     }
   });
 
-  function mensagemErro(msg, code, posicao) {
+  function mensagemErro(msg, code, posicao, tempo=3000) {
     setNotificacao({
       msgErro: msg,
       code: code,
       status: true,
       posicao: posicao
     });
-
-    if(posicao === '0px'){
-      
-    }
 
     setTimeout(() => {
       setNotificacao({
@@ -41,7 +37,7 @@ function TelaInicial({
         status: false,
         posicao: posicao
       });
-    }, 3000);
+    }, tempo);
   }
 
   function definiStap() {
@@ -50,16 +46,15 @@ function TelaInicial({
       return;
     }
     if (deckOk) {
-      console.log(valorInput);
 
-      if (Number.isInteger(valorInput)) {
+      if (Number.isInteger(valorInput) || valorInput === 0) {
         if (
           valorInput <= flashs.filter((f) => f.categoria === valueSelect).length
         ) {
           setMetaDeZap(valorInput);
           renderizarFlashs();
         } else {
-          mensagemErro("Meta maior que o número de cartas no deck!", "Alert", '-180px');
+          mensagemErro("Meta maior que o número de cartas no deck!", "Error", '-180px');
           setValorInput("");
         }
       } else {
@@ -93,12 +88,24 @@ function TelaInicial({
   }
 
   function atualizaValorInput(value) {
-    if (Number(value)) {
-      setValorInput(Number(value));
+    if(value === '' || value === undefined){
+      setValorInput(Number(value))
+      return;
+    }
+    if (Number(value) || Number(value) === 0){
+      if(Number(value) > 0){
+        setValorInput(Number(value));
+      }else{
+        mensagemErro(
+          "A meta de zaps deve ser maior que 0.",
+          "Error",
+          "-180px"
+        );
+      }
     } else {
       mensagemErro(
         "Por favor, preencha apenas números como meta de Zap!",
-        "Alert",
+        "Error",
         "-180px"
       );
     }
