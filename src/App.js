@@ -13,6 +13,7 @@ function App() {
 
   const notify = React.useRef();
 
+  
   let [renderizarFlashs, setRenderizarFlashs] = React.useState(false);
   let [btnResposta, setBtnResposta] = React.useState(true);
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
@@ -188,7 +189,9 @@ const Home = styled.div`
   position: absolute;
   background-color: var(--cor-fundo);
   padding-bottom: 40px;
-  margin-top: -40px;
+  margin-top: -30px;
+  margin-bottom: 100px;
+  box-sizing: initial;
   h1 {
     font-family: "Righteous", cursive;
     font-size: 36px;
@@ -202,22 +205,49 @@ const Home = styled.div`
 
 const EntradaNotificao = keyframes`
   
-  33%{
+  10%{
     right: -90px;
-    opacity: 1;
     transform: initial;
   }
 
-  66%{
+  20%{
     right: -110px;
-    opacity: 1;
+    transform: initial;
+  }
+
+  30%{
+    right: -100px;
+    transform: initial;
+  }
+
+  40%{
+    right: -100px;
+    transform: initial;
+  }
+
+  50%{
+    right: -100px;
+    transform: initial;
+  }
+
+  60%{
+    right: -100px;
+    transform: initial;
+  }
+
+  70%{
+    right: -100px;
     transform: initial;
   }
   
   
-  100%{
+  90%{
     right: -100px;
-    opacity: 1;
+    transform: initial;
+  }
+
+  100%{
+    right: -500px;
     transform: initial;
   }
 `
@@ -234,11 +264,11 @@ const Notificacao = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   top: ${props => props.posicao};
-  right: -80px;
+  right: -1380px;
   border-radius: 8px;
   opacity: 1;
   transform: translateX(20px);
-  animation: ${EntradaNotificao} 1s backwards;
+  animation: ${EntradaNotificao} 3s backwards;
   box-sizing: border-box;
   padding: 15px;
   `

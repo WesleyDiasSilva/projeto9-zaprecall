@@ -21,7 +21,9 @@ function Flashcard({
   setZapadas,
   verificaMeta,
   valueSelect,
-  setNotificacao
+  setNotificacao,
+  perguntaHabilitada,
+  setPerguntaHabilitada
 }) {
   const corVerde = "var(--cor-zap)";
   const corVermelha = "var(--cor-nao-lembrei)";
@@ -110,7 +112,10 @@ function Flashcard({
 
   function mostraPergunta() {
     if (!button) {
-      setStatePergunta(false);
+      if(perguntaHabilitada){
+        setPerguntaHabilitada(false)
+        setStatePergunta(false);
+      }
     } else {
       mensagemErro('Você já respondeu essa questão!','Alert', '0px');
     }
