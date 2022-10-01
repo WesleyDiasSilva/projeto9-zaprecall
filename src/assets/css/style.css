@@ -8,6 +8,7 @@
   --cor-quase-nao-lembrei: #FF922E;
   --cor-zap: #2FBE34;
   --preto: #333333;
+  --cor-fundo-notificacao: #ce3030;
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   color: var(--preto);
   font-family: 'Recursive', sans-serif;
   overflow-x: hidden;
+  background-color: #FB6B6B;
   /* font-family: 'Righteous', cursive; */
 }
 

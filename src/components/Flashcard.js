@@ -20,7 +20,8 @@ function Flashcard({
   zapadas,
   setZapadas,
   verificaMeta,
-  valueSelect
+  valueSelect,
+  setNotificacao
 }) {
   const corVerde = "var(--cor-zap)";
   const corVermelha = "var(--cor-nao-lembrei)";
@@ -35,27 +36,41 @@ function Flashcard({
     src: play,
   });
 
-  function mensagemErro() {
-    alert("calma ai");
+  function mensagemErro(msg, code, posicao) {
+    setNotificacao({
+      msgErro: msg,
+      code: code,
+      status: true,
+      posicao: posicao
+    });
+    setTimeout(() => {
+      setNotificacao({
+        msgErro: "mensagem padrão",
+        code: "code padrão",
+        status: false,
+        posicao: posicao
+      });
+    }, 3000);
   }
 
-  function verificaSeTerminou(){
-    if(flashs.filter(f => f.categoria === valueSelect).length !== lembradas + 1){
-      console.log(flashs.filter(f => f.categoria === valueSelect).length)
-      console.log(lembradas)
-    }else{
-      verificaMeta()
+  function verificaSeTerminou() {
+    if (
+      flashs.filter((f) => f.categoria === valueSelect).length !==
+      lembradas + 1
+    ) {
+    } else {
+      verificaMeta();
     }
   }
 
   function respondeu(escolha) {
     setLembradas(lembradas + 1);
-    verificaSeTerminou()
+    verificaSeTerminou();
     setStatePergunta(true);
     setStateResposta(false);
     setButton("true");
     if (escolha === "Zap") {
-      setZapadas(zapadas + 1)
+      setZapadas(zapadas + 1);
       setStyleFlash({
         color: "#2FBE34",
         styleLine: "line-through",
@@ -97,7 +112,7 @@ function Flashcard({
     if (!button) {
       setStatePergunta(false);
     } else {
-      mensagemErro();
+      mensagemErro('Você já respondeu essa questão!','Alert', '0px');
     }
   }
 

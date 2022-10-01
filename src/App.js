@@ -1,5 +1,5 @@
 import "../src/assets/css/style.css";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Flashcard from "./components/Flashcard";
 import logo from "../src/assets/img/logo.png";
 import React from "react";
@@ -10,6 +10,9 @@ import help from "../src/assets/img/help.svg";
 import flashs from "./flashs";
 
 function App() {
+
+  const notify = React.useRef();
+
   let [renderizarFlashs, setRenderizarFlashs] = React.useState(false);
   let [btnResposta, setBtnResposta] = React.useState(true);
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
@@ -17,16 +20,29 @@ function App() {
   let [zapadas, setZapadas] = React.useState(0);
   let [metaDeZap, setMetaDeZap] = React.useState(0);
   let [valueSelect, setValueSelect] = React.useState("");
-  let [temErro, setTemErro] = React.useState(false);
-  let [erro, setErro] = React.useState("");
   let [fila, setFila] = React.useState([]);
+  let [notificacao, setNotificacao] = React.useState({
+    msgErro: 'Mensagem padrão de erro',
+    code: 'alert',
+    status: false,
+    posicao: '-180px'
+  })
 
-  console.log(zapadas);
-  console.log(metaDeZap);
+  React.useEffect(() => {
+    if(notify.current){
+      window.scrollTo({
+        top:notify.current.getBoundingClientRect(),
+        behavior: "smooth"
+      })
+    }
+    console.log('nada')
+  },[notificacao])
 
   const filaRenderizada = [];
 
+
   function verificaMeta() {
+    console.log(zapadas);
     if (zapadas >= metaDeZap - 1) {
       setTimeout(() => {
         alert("Boa garoto");
@@ -55,55 +71,58 @@ function App() {
 
   return (
     <div>
-      <Home>
-        {!renderizarFlashs && (
-          <TelaInicial
-            valueSelect={valueSelect}
-            setMetaDeZap={setMetaDeZap}
-            setRenderizarFlashs={setRenderizarFlashs}
-            setValueSelect={setValueSelect}
-            flashs={flashs}
-          ></TelaInicial>
-        )}
-
-        {renderizarFlashs ? (
-          <ContainerCabecalho>
-            <img src={logo} alt="Logo do zaprecall"></img>
-            <h1>ZapRecall</h1>
-          </ContainerCabecalho>
-        ) : (
-          ""
-        )}
-        {flashs
-          .filter((f) => f.categoria === valueSelect)
-          .map((f, index) =>
-            renderizarFlashs ? (
-              <Flashcard
-                valueSelect={valueSelect}
-                verificaMeta={verificaMeta}
-                setZapadas={setZapadas}
-                zapadas={zapadas}
-                fila={fila}
-                setFila={setFila}
-                lembradas={lembradas}
-                setLembradas={setLembradas}
-                habilitaBtnResposta={habilitaBtnResposta}
-                btnResposta={btnResposta}
-                setBtnResposta={setBtnResposta}
-                perguntaHabilitada={perguntaHabilitada}
-                setPerguntaHabilitada={setPerguntaHabilitada}
-                key={index}
-                pergunta={f.pergunta}
-                resposta={f.resposta}
-                categoria={f.categoria}
-                index={index}
-              />
-            ) : (
-              ""
-            )
+        <Home>
+      {notificacao.status && <Notificacao ref={notify} posicao={notificacao.posicao}>{notificacao.msgErro}</Notificacao>}
+          {!renderizarFlashs && (
+            <TelaInicial
+              setNotificacao={setNotificacao}
+              valueSelect={valueSelect}
+              setMetaDeZap={setMetaDeZap}
+              setRenderizarFlashs={setRenderizarFlashs}
+              setValueSelect={setValueSelect}
+              flashs={flashs}
+            ></TelaInicial>
           )}
-      </Home>
-      
+          {renderizarFlashs ? (
+            <ContainerCabecalho>
+              <img src={logo} alt="Logo do zaprecall"></img>
+              <h1>ZapRecall</h1>
+            </ContainerCabecalho>
+          ) : (
+            ""
+          )}
+          {flashs
+            .filter((f) => f.categoria === valueSelect)
+            .map((f, index) =>
+              renderizarFlashs ? (
+                <Flashcard
+                  setNotificacao={setNotificacao}
+                  valueSelect={valueSelect}
+                  verificaMeta={verificaMeta}
+                  setZapadas={setZapadas}
+                  zapadas={zapadas}
+                  fila={fila}
+                  setFila={setFila}
+                  lembradas={lembradas}
+                  setLembradas={setLembradas}
+                  habilitaBtnResposta={habilitaBtnResposta}
+                  btnResposta={btnResposta}
+                  setBtnResposta={setBtnResposta}
+                  perguntaHabilitada={perguntaHabilitada}
+                  setPerguntaHabilitada={setPerguntaHabilitada}
+                  key={index}
+                  pergunta={f.pergunta}
+                  resposta={f.resposta}
+                  categoria={f.categoria}
+                  index={index}
+                />
+              ) : (
+                ""
+              )
+            )}
+        </Home>
+
+
       {renderizarFlashs ? (
         <Footer>
           <div>
@@ -139,6 +158,7 @@ const ContainerCabecalho = styled.div`
 `;
 
 
+
 const Home = styled.div`
   width: 100%;
   height: 130%;
@@ -163,6 +183,51 @@ const Home = styled.div`
   background-color: #cea2a0;
 } */
 `;
+
+const EntradaNotificao = keyframes`
+  
+  33%{
+    right: -90px;
+    opacity: 1;
+    transform: initial;
+  }
+
+  66%{
+    right: -110px;
+    opacity: 1;
+    transform: initial;
+  }
+  
+  
+  100%{
+    right: -100px;
+    opacity: 1;
+    transform: initial;
+  }
+`
+
+const Notificacao = styled.div`
+  width: 250px;
+  height: 70px;
+  background-color: #ce3030;
+  color: white;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  top: ${props => props.posicao};
+  right: -80px;
+  border-radius: 8px;
+  opacity: 1;
+  transform: translateX(20px);
+  animation: ${EntradaNotificao} 1s backwards;
+  box-sizing: border-box;
+  padding: 15px;
+  `
+
+
 
 const Footer = styled.footer`
   position: fixed;

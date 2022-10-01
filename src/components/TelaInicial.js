@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import logo from "../assets/img/logo.png";
 
 function TelaInicial({
@@ -7,12 +7,13 @@ function TelaInicial({
   setRenderizarFlashs,
   setValueSelect,
   setMetaDeZap,
-  valueSelect
+  valueSelect,
+  setNotificacao,
 }) {
-  let valorInput = "";
-
-  let [textoBotao, setTextoBotao] = React.useState("Definir Meta Zap");
+  let [textoBotao, setTextoBotao] = React.useState("Iniciar Recall");
   let [deckOk, setDeckOk] = React.useState(false);
+  let [iniciou, setIniciou] = React.useState(false);
+  let [valorInput, setValorInput] = React.useState("");
 
   const opcoes = [];
   flashs.forEach((f) => {
@@ -20,29 +21,53 @@ function TelaInicial({
       opcoes.push(f.categoria);
     }
   });
-  
-  function mensagemErro(){
-    alert('calma ai')
+
+  function mensagemErro(msg, code, posicao) {
+    setNotificacao({
+      msgErro: msg,
+      code: code,
+      status: true,
+      posicao: posicao
+    });
+
+    if(posicao === '0px'){
+      
+    }
+
+    setTimeout(() => {
+      setNotificacao({
+        msgErro: "mensagem padrão",
+        code: "code padrão",
+        status: false,
+        posicao: posicao
+      });
+    }, 3000);
   }
 
   function definiStap() {
+    if (!iniciou) {
+      setIniciou(true);
+      return;
+    }
     if (deckOk) {
-      if (!isNaN(valorInput)) {
-        if (Number.isInteger(valorInput)) {
-          console.log(valorInput)
-          console.log(flashs.filter(f => f.categoria === valueSelect).length)
-          if(valorInput <= flashs.filter(f => f.categoria === valueSelect).length){
-            setMetaDeZap(valorInput);
-            renderizarFlashs();
-          }else{
-            alert('Não tem tantas cartas para memorizar, escolha um número menor!')
-          }
+      console.log(valorInput);
+
+      if (Number.isInteger(valorInput)) {
+        if (
+          valorInput <= flashs.filter((f) => f.categoria === valueSelect).length
+        ) {
+          setMetaDeZap(valorInput);
+          renderizarFlashs();
         } else {
-          alert("error: número inválido");
-          return;
+          mensagemErro("Meta maior que o número de cartas no deck!", "Alert", '-180px');
+          setValorInput("");
         }
       } else {
-        alert("error: não é número");
+        mensagemErro(
+          "Por favor, preencha um número como meta de Zap!",
+          "Alert",
+          "-180px"
+        );
         return;
       }
     } else {
@@ -51,11 +76,11 @@ function TelaInicial({
   }
 
   function escolheDeck() {
-    if(valueSelect){
-    setTextoBotao("Iniciar Recall");
-    setDeckOk(true);
-    }else{
-      mensagemErro()
+    if (valueSelect) {
+      setTextoBotao("Iniciar Recall");
+      setDeckOk(true);
+    } else {
+      mensagemErro("Escolha um Deck por favor!", "Error", "-180px");
     }
   }
 
@@ -68,7 +93,15 @@ function TelaInicial({
   }
 
   function atualizaValorInput(value) {
-    valorInput = Number(value);
+    if (Number(value)) {
+      setValorInput(Number(value));
+    } else {
+      mensagemErro(
+        "Por favor, preencha apenas números como meta de Zap!",
+        "Alert",
+        "-180px"
+      );
+    }
   }
 
   return (
@@ -79,10 +112,10 @@ function TelaInicial({
         {deckOk ? (
           <Input
             onChange={({ target }) => atualizaValorInput(target.value)}
-            placeholder="Digite sua meta de zaps"
+            value={valorInput}
+            placeholder="Qual sua meta de zaps?"
           ></Input>
-        ) : (
-
+        ) : iniciou ? (
           <select onChange={({ target }) => pegaValor(target)}>
             <option disabled selected>
               Selecione um deck
@@ -91,6 +124,8 @@ function TelaInicial({
               <option key={opt}>{opt}</option>
             ))}
           </select>
+        ) : (
+          ""
         )}
         <button onClick={definiStap}>{textoBotao}</button>
       </DeckMain>
@@ -131,11 +166,11 @@ const DeckMain = styled.div`
     padding: 16px 22px;
     border-radius: 5px;
     font-family: "Righteous";
-    color: #D70900;
+    color: #d70900;
     border: 1px;
     font-size: 18px;
     cursor: pointer;
-   }
+  }
 `;
 
 const Input = styled.input`
