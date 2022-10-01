@@ -7,6 +7,7 @@ import TelaInicial from './components/TelaInicial';
 import check from '../src/assets/img/check.svg'
 import close from '../src/assets/img/close.svg'
 import help from '../src/assets/img/help.svg'
+import flashs from './flashs';
 
 
 
@@ -16,46 +17,29 @@ function App() {
   let [btnResposta, setBtnResposta] = React.useState(true)
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
   let [lembradas, setLembradas] = React.useState(0);
+  let [zapadas, setZapadas] = React.useState(0);
   let [metaDeZap, setMetaDeZap]  = React.useState(0);
   let [valueSelect, setValueSelect]  = React.useState('');
   let [temErro, setTemErro] = React.useState(false);
   let [erro, setErro] = React.useState('')
   let [fila, setFila] = React.useState([])
   
+  console.log(zapadas);
+  console.log(metaDeZap)
+
   const filaRenderizada = []
 
-  const flashs = [
-    {
-      pergunta: 'O que é JSX?',
-      resposta:'Uma extensão de linguagem JavaScript',
-      categoria: 'react'
-    },
-    {
-      pergunta: 'O React é?',
-      resposta:'uma biblioteca JavaScript para construção de interfaces',
-      categoria: 'react'
-    },
-    {
-      pergunta: 'O que é HTML?',
-      resposta:'Uma linguagem de marcação',
-      categoria: 'html'
-    },
-    {
-      pergunta: 'Componentes devem iniciar com?',
-      resposta:'letra maiúscula',
-      categoria: 'react'
-    },
-    {
-      pergunta: 'Podemos colocar __ dentro do JSX?',
-      resposta:'expressões',
-      categoria: 'react'
-    },
-    {
-      pergunta: 'O ReactDOM nos ajuda __?',
-      resposta:'interagindo com a DOM para colocar componentes React na mesma',
-      categoria: 'react'
-    },
-  ]
+  function verificaMeta(){
+    if(zapadas >= metaDeZap - 1){
+      setTimeout(() => {
+        alert('Boa garoto')
+      }, 500)
+    }else{
+      setTimeout(()=> {
+        alert('perdeu')
+      }, 500)
+    }
+  }
 
   function habilitaBtnResposta(){
     setBtnResposta(false)
@@ -92,6 +76,10 @@ function App() {
         </ContainerCabecalho> : ''}
         {flashs.filter(f => f.categoria === valueSelect).map((f, index) => 
         renderizarFlashs ? <Flashcard 
+          valueSelect={valueSelect}
+          verificaMeta={verificaMeta}
+          setZapadas={setZapadas}
+          zapadas={zapadas}
           fila={fila}
           setFila={setFila}
           lembradas={lembradas} 

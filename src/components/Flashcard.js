@@ -1,114 +1,173 @@
-import React from 'react'
-import styled from 'styled-components'
-import play from '../assets/img/play-outline-icon.svg'
-import seta from '../assets/img/setinha.png'
-import check from '../assets/img/check.svg'
-import help from '../assets/img/help.svg'
-import close from '../assets/img/close.svg'
+import React from "react";
+import styled from "styled-components";
+import play from "../assets/img/play-outline-icon.svg";
+import seta from "../assets/img/setinha.png";
+import check from "../assets/img/check.svg";
+import help from "../assets/img/help.svg";
+import close from "../assets/img/close.svg";
+import flashs from "../flashs";
 
+function Flashcard({
+  pergunta,
+  resposta,
+  categoria,
+  index,
+  habilitaBtnResposta,
+  setLembradas,
+  lembradas,
+  fila,
+  setFila,
+  zapadas,
+  setZapadas,
+  verificaMeta,
+  valueSelect
+}) {
+  const corVerde = "var(--cor-zap)";
+  const corVermelha = "var(--cor-nao-lembrei)";
+  const corAmarela = "var(--cor-quase-nao-lembrei)";
 
-function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, setLembradas, lembradas, fila, setFila}) {
-
-  const corVerde =  'var(--cor-zap)'
-  const corVermelha = 'var(--cor-nao-lembrei)'
-  const corAmarela = 'var(--cor-quase-nao-lembrei)'
-
-  let [button, setButton] = React.useState(false)
+  let [button, setButton] = React.useState(false);
   let [statePergunta, setStatePergunta] = React.useState(true);
   let [stateResposta, setStateResposta] = React.useState(false);
-  let [styleFlash, setStyleFlash] = React.useState({color: 'black', styleLine: 'none', src: play})
+  let [styleFlash, setStyleFlash] = React.useState({
+    color: "black",
+    styleLine: "none",
+    src: play,
+  });
 
-  function mensagemErro(){
-    alert('calma ai')
+  function mensagemErro() {
+    alert("calma ai");
   }
 
-  function respondeu(escolha){
+  function verificaSeTerminou(){
+    if(flashs.filter(f => f.categoria === valueSelect).length !== lembradas + 1){
+      console.log(flashs.filter(f => f.categoria === valueSelect).length)
+      console.log(lembradas)
+    }else{
+      verificaMeta()
+    }
+  }
+
+  function respondeu(escolha) {
     setLembradas(lembradas + 1);
+    verificaSeTerminou()
     setStatePergunta(true);
     setStateResposta(false);
-    setButton('true')
-    if(escolha === 'Zap'){
-      setStyleFlash({color: '#2FBE34', styleLine: 'line-through', src: check})
-      if(fila.length < 4){
-        setFila([...fila, 'Zap'])
-      }else{
+    setButton("true");
+    if (escolha === "Zap") {
+      setZapadas(zapadas + 1)
+      setStyleFlash({
+        color: "#2FBE34",
+        styleLine: "line-through",
+        src: check,
+      });
+      if (fila.length < 4) {
+        setFila([...fila, "Zap"]);
+      } else {
         setFila([...fila.shift()]);
-        setFila([...fila, 'Zap'])
+        setFila([...fila, "Zap"]);
       }
     }
-    if(escolha === 'Quase não lembrei'){
-      setStyleFlash({color: '#FF922E', styleLine: 'line-through', src: help})
-      if(fila.length < 4){
-        setFila([...fila, 'Help'])
-      }else{
+
+    if (escolha === "Quase não lembrei") {
+      setStyleFlash({ color: "#FF922E", styleLine: "line-through", src: help });
+      if (fila.length < 4) {
+        setFila([...fila, "Help"]);
+      } else {
         setFila([...fila.shift()]);
-        setFila([...fila, 'Help'])
+        setFila([...fila, "Help"]);
       }
     }
-    if(escolha === 'Não lembrei'){
-      setStyleFlash({color: '#FF3030', styleLine: 'line-through', src: close})
-      if(fila.length < 4){
-        setFila([...fila, 'Close'])
-      }else{
+    if (escolha === "Não lembrei") {
+      setStyleFlash({
+        color: "#FF3030",
+        styleLine: "line-through",
+        src: close,
+      });
+      if (fila.length < 4) {
+        setFila([...fila, "Close"]);
+      } else {
         setFila([...fila.shift()]);
-        setFila([...fila, 'Close'])
+        setFila([...fila, "Close"]);
       }
-    }
-  }
-  
-  function mostraPergunta(){
-    if(!button){
-      setStatePergunta(false);
-    }else{
-      mensagemErro()
     }
   }
 
-  function mostraResposta(){
-      setStateResposta(true);
-      habilitaBtnResposta(false);
+  function mostraPergunta() {
+    if (!button) {
+      setStatePergunta(false);
+    } else {
+      mensagemErro();
+    }
+  }
+
+  function mostraResposta() {
+    setStateResposta(true);
+    habilitaBtnResposta(false);
   }
 
   return (
     <div>
-      {statePergunta ? 
-
+      {statePergunta ? (
         <FlashcardContainer color={styleFlash.color}>
-
-          <NomePergunta styleLine={styleFlash.styleLine} color={styleFlash.color}>Pergunta {index + 1}
+          <NomePergunta
+            styleLine={styleFlash.styleLine}
+            color={styleFlash.color}
+          >
+            Pergunta {index + 1}
           </NomePergunta>
 
-          <Svg onClick={mostraPergunta} disabled={button} color={styleFlash.color} src={styleFlash.src} alt='botao de play pro flashcard'>
-          </Svg>
-
+          <Svg
+            onClick={mostraPergunta}
+            disabled={button}
+            color={styleFlash.color}
+            src={styleFlash.src}
+            alt="botao de play pro flashcard"
+          ></Svg>
         </FlashcardContainer>
-        
-      :
-      stateResposta ? 
-       
-      <Resposta>
-        {resposta}
-        <Action>
-          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corVermelha}>Não lembrei</Button>
-          
-          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corAmarela}>Quase não lembrei</Button>
-          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corVerde}>Zap</Button>
-        </Action>
-      </Resposta>
-      :
-       <FlashCardPergunta>
-        {pergunta}
-        <Setinha  onClick={mostraResposta} src={seta} alt='opcao de ver resposta'></Setinha>
-      </FlashCardPergunta> 
-    }
+      ) : stateResposta ? (
+        <Resposta>
+          {resposta}
+          <Action>
+            <Button
+              onClick={({ target }) => respondeu(target.innerText)}
+              texto={"white"}
+              cor={corVermelha}
+            >
+              Não lembrei
+            </Button>
 
-      
-
+            <Button
+              onClick={({ target }) => respondeu(target.innerText)}
+              texto={"white"}
+              cor={corAmarela}
+            >
+              Quase não lembrei
+            </Button>
+            <Button
+              onClick={({ target }) => respondeu(target.innerText)}
+              texto={"white"}
+              cor={corVerde}
+            >
+              Zap
+            </Button>
+          </Action>
+        </Resposta>
+      ) : (
+        <FlashCardPergunta>
+          {pergunta}
+          <Setinha
+            onClick={mostraResposta}
+            src={seta}
+            alt="opcao de ver resposta"
+          ></Setinha>
+        </FlashCardPergunta>
+      )}
     </div>
-  )
+  );
 }
 
-export default Flashcard
+export default Flashcard;
 
 const Resposta = styled.div`
   min-height: 130px;
@@ -121,7 +180,7 @@ const Resposta = styled.div`
   cursor: default;
   padding: 20px 10px;
   position: relative;
-`
+`;
 
 const Action = styled.div`
   display: flex;
@@ -129,12 +188,12 @@ const Action = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 10px;
-`
+`;
 
 const Button = styled.button`
   width: 100%;
   height: 40px;
-  background-color: ${props => props.cor};
+  background-color: ${(props) => props.cor};
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -144,10 +203,10 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   border: none;
-  &:hover{
-    filter: brightness(0.7)
+  &:hover {
+    filter: brightness(0.7);
   }
-`
+`;
 
 const Setinha = styled.img`
   cursor: pointer;
@@ -156,20 +215,20 @@ const Setinha = styled.img`
   height: 23px;
   position: absolute;
   bottom: 10px;
-  right: 20px
-`
+  right: 20px;
+`;
 
 const Svg = styled.img`
   width: 23px;
   height: 23px;
-  display: ${props => props.display};
-  color: ${props => props.color};
-`
+  display: ${(props) => props.display};
+  color: ${(props) => props.color};
+`;
 
 const NomePergunta = styled.span`
-  text-decoration: ${props => props.styleLine}; 
-  color: ${props => props.color}
-`
+  text-decoration: ${(props) => props.styleLine};
+  color: ${(props) => props.color};
+`;
 
 const FlashCardPergunta = styled.div`
   min-height: 130px;
@@ -182,7 +241,7 @@ const FlashCardPergunta = styled.div`
   cursor: default;
   padding: 20px 10px;
   position: relative;
-`
+`;
 
 const FlashcardContainer = styled.div`
   width: 300px;
@@ -196,6 +255,6 @@ const FlashcardContainer = styled.div`
   margin: 10px 0px;
   padding: 10px 10px;
   cursor: pointer;
-  font-family: 'Recursive', cursive;
-  color: ${props => props.color};
-`
+  font-family: "Recursive", cursive;
+  color: ${(props) => props.color};
+`;

@@ -20,7 +20,7 @@ function TelaInicial({
       opcoes.push(f.categoria);
     }
   });
-
+  
   function mensagemErro(){
     alert('calma ai')
   }
@@ -29,8 +29,14 @@ function TelaInicial({
     if (deckOk) {
       if (!isNaN(valorInput)) {
         if (Number.isInteger(valorInput)) {
-          setMetaDeZap(valorInput);
-          renderizarFlashs();
+          console.log(valorInput)
+          console.log(flashs.filter(f => f.categoria === valueSelect).length)
+          if(valorInput <= flashs.filter(f => f.categoria === valueSelect).length){
+            setMetaDeZap(valorInput);
+            renderizarFlashs();
+          }else{
+            alert('Não tem tantas cartas para memorizar, escolha um número menor!')
+          }
         } else {
           alert("error: número inválido");
           return;
