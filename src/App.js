@@ -3,17 +3,18 @@ import styled from 'styled-components';
 import Flashcard from './components/Flashcard';
 import logo from '../src/assets/img/logo.png'
 import React from 'react';
+import TelaInicial from './components/TelaInicial';
+
 
 function App() {
 
-  
+  let [renderizarFlashs, setRenderizarFlashs] = React.useState(false)
   let [btnResposta, setBtnResposta] = React.useState(true)
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
   let [lembradas, setLembradas] = React.useState(0);
-  let [podeAbrirPergunta, setPodeAbrirPergunta] = React.useState(true);
-
+  let [metaDeZap, setMetaDeZap]  = React.useState(0)
+  let [valueSelect, setValueSelect]  = React.useState('')
   
-
   const flashs = [
     {
       pergunta: 'O que é JSX?',
@@ -24,6 +25,11 @@ function App() {
       pergunta: 'O React é?',
       resposta:'uma biblioteca JavaScript para construção de interfaces',
       categoria: 'react'
+    },
+    {
+      pergunta: 'O que é HTML?',
+      resposta:'Uma linguagem de marcação',
+      categoria: 'html'
     },
     {
       pergunta: 'Componentes devem iniciar com?',
@@ -47,16 +53,24 @@ function App() {
   }
 
   
-
   return (
     <div>
       <Home>
-        <ContainerCabecalho>
+        {!renderizarFlashs && <TelaInicial 
+          valueSelect={valueSelect}
+          setMetaDeZap={setMetaDeZap}
+          setRenderizarFlashs={setRenderizarFlashs}
+          setValueSelect={setValueSelect} 
+          flashs={flashs}>  
+        </TelaInicial>}
+        
+        
+        {renderizarFlashs ? <ContainerCabecalho>
           <img src={logo} alt='Logo do zaprecall'></img>
           <h1>ZapRecall</h1>
-        </ContainerCabecalho>
-
-        {flashs.map((f, index) => <Flashcard 
+        </ContainerCabecalho> : ''}
+        {flashs.filter(f => f.categoria === valueSelect).map((f, index) => 
+        renderizarFlashs ? <Flashcard 
           lembradas={lembradas} 
           setLembradas={setLembradas} 
           habilitaBtnResposta={habilitaBtnResposta} 
@@ -68,14 +82,14 @@ function App() {
           pergunta={f.pergunta} 
           resposta={f.resposta} 
           categoria={f.categoria} 
-          index={index}/>)}
+          index={index}/> : '')}
       </Home>
-      <Footer>
+      {renderizarFlashs ? <Footer>
       <div>
         <span>{lembradas}</span>
-        <span>/{flashs.length} CONCLUÍDO</span>
+        <span>/{flashs.filter(f => f.categoria === valueSelect).length} CONCLUÍDO</span>
       </div>
-      </Footer>
+      </Footer> : ''}
     </div>
   );
 }
@@ -108,16 +122,7 @@ const Home = styled.div`
   font-size: 36px;
   color: white;
   }
-  button {
-    width: 246px;
-    height: 54px;
-    padding: 16px 22px;
-    border-radius: 5px;
-    color: #D70900;
-    border: 1px;
-    font-size: 18px;
-    cursor: pointer;
-   }
+  
   /* &:hover{
   background-color: #cea2a0;
 } */
@@ -135,6 +140,7 @@ const Footer = styled.footer`
   padding: 14px 10px;
   font-size: 18px;
   color: black;
+  justify-content: center;
   position: fixed;
   text-align: center;
   display: flex;

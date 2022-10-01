@@ -13,29 +13,37 @@ function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, s
   const corVermelha = 'var(--cor-nao-lembrei)'
   const corAmarela = 'var(--cor-quase-nao-lembrei)'
 
-
+  let [button, setButton] = React.useState(false)
   let [statePergunta, setStatePergunta] = React.useState(true);
   let [stateResposta, setStateResposta] = React.useState(false);
   let [styleFlash, setStyleFlash] = React.useState({color: 'black', styleLine: 'none', src: play})
 
-  function respondeu(escolha){
+  function mensagemErro(){
+    alert('calma ai')
+  }
 
+  function respondeu(escolha){
     setLembradas(lembradas + 1);
     setStatePergunta(true);
     setStateResposta(false);
+    setButton('true')
     if(escolha === 'Zap'){
-      setStyleFlash({color: 'green', styleLine: 'line-through', src: check})
+      setStyleFlash({color: '#2FBE34', styleLine: 'line-through', src: check})
     }
     if(escolha === 'Quase não lembrei'){
-      setStyleFlash({color: 'yellow', styleLine: 'line-through', src: help})
+      setStyleFlash({color: '#FF922E', styleLine: 'line-through', src: help})
     }
     if(escolha === 'Não lembrei'){
-      setStyleFlash({color: 'red', styleLine: 'line-through', src: close})
+      setStyleFlash({color: '#FF3030', styleLine: 'line-through', src: close})
     }
   }
   
   function mostraPergunta(){
+    if(!button){
       setStatePergunta(false);
+    }else{
+      mensagemErro()
+    }
   }
 
   function mostraResposta(){
@@ -45,14 +53,14 @@ function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, s
 
   return (
     <div>
-      {statePergunta? 
+      {statePergunta ? 
 
         <FlashcardContainer color={styleFlash.color}>
 
           <NomePergunta styleLine={styleFlash.styleLine} color={styleFlash.color}>Pergunta {index + 1}
           </NomePergunta>
 
-          <Svg onClick={mostraPergunta} color={styleFlash.color} src={styleFlash.src} alt='botao de play pro flashcard'>
+          <Svg onClick={mostraPergunta} disabled={button} color={styleFlash.color} src={styleFlash.src} alt='botao de play pro flashcard'>
           </Svg>
 
         </FlashcardContainer>
@@ -63,9 +71,10 @@ function Flashcard({pergunta, resposta, categoria, index, habilitaBtnResposta, s
       <Resposta>
         {resposta}
         <Action>
-          <Button onClick={({target}) => respondeu(target.innerText)} cor={corVermelha}>Não lembrei</Button>
-          <Button onClick={({target}) => respondeu(target.innerText)} cor={corAmarela}>Quase não lembrei</Button>
-          <Button onClick={({target}) => respondeu(target.innerText)} cor={corVerde}>Zap</Button>
+          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corVermelha}>Não lembrei</Button>
+          
+          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corAmarela}>Quase não lembrei</Button>
+          <Button onClick={({target}) => respondeu(target.innerText)} texto={'white'} cor={corVerde}>Zap</Button>
         </Action>
       </Resposta>
       :

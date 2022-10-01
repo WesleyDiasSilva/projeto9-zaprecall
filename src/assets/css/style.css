@@ -36,21 +36,6 @@ body {
   font-family: 'Recursive', cursive;
 } */
 
-.flashcard.acerto {
-  color: var(--cor-zap);
-  text-decoration: line-through;
-}
-
-.flashcard.help {
-  color: var(--cor-quase-nao-lembrei);
-  text-decoration: line-through;
-}
-
-.flashcard.erro {
-  color: var(--cor-nao-lembrei);
-  text-decoration: line-through;
-}
-
 
 .flashcard.aberto {
   min-height: 130px;
@@ -144,10 +129,7 @@ img.icone {
 }
 
 
-.deck {
-  display: flex;
-  flex-direction: column;
-}
+
 
 .deck .header {
   position: fixed;
