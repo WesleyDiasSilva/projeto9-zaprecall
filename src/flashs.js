@@ -28,6 +28,21 @@ const flashs = [{
   resposta:'interagindo com a DOM para colocar componentes React na mesma',
   categoria: 'react'
 },
+{
+  pergunta: 'Qual hook mais usamos quando tratamos com requisições?',
+  resposta:'UseEffect',
+  categoria: 'react'
+},
+{
+  pergunta: 'Qual framework de css nos ajuda a "componentizar" um elemento?',
+  resposta:'Styled-components',
+  categoria: 'react'
+},
+{
+  pergunta: 'Como iniciar um projeto React?',
+  resposta:'npx create-react-app',
+  categoria: 'react'
+},
 ]
 
 export default flashs
