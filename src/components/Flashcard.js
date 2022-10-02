@@ -67,6 +67,7 @@ function Flashcard({
 
   function respondeu(escolha) {
     setLembradas(lembradas + 1);
+    setPerguntaHabilitada(true)
     verificaSeTerminou();
     setStatePergunta(true);
     setStateResposta(false);
