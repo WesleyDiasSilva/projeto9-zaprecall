@@ -15,6 +15,11 @@ const flashs = [
     categoria: "Html",
   },
   {
+    pergunta: "A tag 'img' precisa ser fechada com '</img>'?",
+    resposta: "Não, podemos fechar na própria tag de abertura após passar os atributos",
+    categoria: "Html",
+  },
+  {
     pergunta: "Componentes devem iniciar com?",
     resposta: "letra maiúscula",
     categoria: "React",

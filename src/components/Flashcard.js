@@ -38,6 +38,8 @@ function Flashcard({
     src: play,
   });
 
+  let zapadasEmTempoReal = 0;
+
   function mensagemErro(msg, code, posicao, tempo=3000) {
     setNotificacao({
       msgErro: msg,
@@ -55,16 +57,6 @@ function Flashcard({
     }, tempo);
   }
 
-  function verificaSeTerminou() {
-    if (
-      flashs.filter((f) => f.categoria === valueSelect).length !==
-      lembradas + 1
-    ) {
-    } else {
-      verificaMeta();
-    }
-  }
-
   function respondeu(escolha) {
     setLembradas(lembradas + 1);
     setPerguntaHabilitada(true)
@@ -74,6 +66,8 @@ function Flashcard({
     setButton("true");
     if (escolha === "Zap") {
       setZapadas(zapadas + 1);
+      zapadasEmTempoReal = zapadas + 1
+      console.log(zapadasEmTempoReal)
       setStyleFlash({
         color: "#2FBE34",
         styleLine: "line-through",
@@ -110,6 +104,22 @@ function Flashcard({
       }
     }
   }
+  
+  
+  function verificaSeTerminou() {
+    if (
+      flashs.filter((f) => f.categoria === valueSelect).length !==
+      lembradas + 1
+    ) {
+    } else {
+        verificaMeta(zapadasEmTempoReal);
+        
+    }
+  }
+
+  
+
+ 
 
   function mostraPergunta() {
     if (!button) {

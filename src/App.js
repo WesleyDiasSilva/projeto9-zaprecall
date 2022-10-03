@@ -10,10 +10,8 @@ import help from "../src/assets/img/help.svg";
 import flashs from "./flashs";
 
 function App() {
-
   const notify = React.useRef();
 
-  
   let [renderizarFlashs, setRenderizarFlashs] = React.useState(false);
   let [btnResposta, setBtnResposta] = React.useState(true);
   let [perguntaHabilitada, setPerguntaHabilitada] = React.useState(true);
@@ -23,47 +21,59 @@ function App() {
   let [valueSelect, setValueSelect] = React.useState("");
   let [fila, setFila] = React.useState([]);
   let [notificacao, setNotificacao] = React.useState({
-    msgErro: 'Mensagem padrão de erro',
-    code: 'alert',
+    msgErro: "Mensagem padrão de erro",
+    code: "alert",
     status: false,
-    posicao: '-180px'
-  })
+    posicao: "-180px",
+  });
 
   React.useEffect(() => {
-    if(notify.current){
+    if (notify.current) {
       window.scrollTo({
-        top:notify.current.getBoundingClientRect(),
-        behavior: "smooth"
-      })
+        top: notify.current.getBoundingClientRect(),
+        behavior: "smooth",
+      });
     }
-    console.log('nada')
-  },[notificacao])
+    console.log("nada");
+  }, [notificacao]);
 
   const filaRenderizada = [];
 
-  function mensagemErro(msg, code, posicao, tempo=3000) {
+  function mensagemErro(msg, code, posicao, tempo = 3000) {
     setNotificacao({
       msgErro: msg,
       code: code,
       status: true,
-      posicao: posicao
+      posicao: posicao,
     });
     setTimeout(() => {
       setNotificacao({
         msgErro: "mensagem padrão",
         code: "code padrão",
         status: false,
-        posicao: posicao
+        posicao: posicao,
       });
     }, tempo);
   }
 
-  function verificaMeta() {
-    console.log(zapadas);
-    if (zapadas >= metaDeZap - 1) {
-      setTimeout(mensagemErro('Parabéns, você foi muito bem!','Success','0px', 7000), 500);
+  function verificaMeta(zaps) {
+    console.log('Zapadas:', zaps)
+    console.log('MetaDeZaps:', metaDeZap)
+    if (zaps >= metaDeZap) {
+      setTimeout(
+        mensagemErro("Parabéns, você foi muito bem!", "Success", "0px", 7000),
+        500
+      );
     } else {
-      setTimeout(mensagemErro('Infelizmente você perdeu, tente novamente!', 'Alert', '0px', 7000), 500);
+      setTimeout(
+        mensagemErro(
+          "Infelizmente você perdeu, tente novamente!",
+          "Alert",
+          "0px",
+          7000
+        ),
+        500
+      );
     }
   }
 
@@ -84,61 +94,72 @@ function App() {
 
   return (
     <div>
-        <Home>
-      {notificacao.status && <Notificacao
-       ref={notify} 
-       posicao={notificacao.posicao}
-       cor={notificacao.code === 'Alert' ? '#FF922E' : notificacao.code === 'Error' ? '#CE3030' : notificacao.code === 'Success' ? '#2FBE34' : ''}
-       >{notificacao.msgErro}</Notificacao>}
-          {!renderizarFlashs && (
-            <TelaInicial
-              setNotificacao={setNotificacao}
-              valueSelect={valueSelect}
-              setMetaDeZap={setMetaDeZap}
-              setRenderizarFlashs={setRenderizarFlashs}
-              setValueSelect={setValueSelect}
-              flashs={flashs}
-            ></TelaInicial>
+      <Home>
+        {notificacao.status && (
+          <Notificacao
+            ref={notify}
+            posicao={notificacao.posicao}
+            cor={
+              notificacao.code === "Alert"
+                ? "#FF922E"
+                : notificacao.code === "Error"
+                ? "#CE3030"
+                : notificacao.code === "Success"
+                ? "#2FBE34"
+                : ""
+            }
+          >
+            {notificacao.msgErro}
+          </Notificacao>
+        )}
+        {!renderizarFlashs && (
+          <TelaInicial
+            setNotificacao={setNotificacao}
+            valueSelect={valueSelect}
+            setMetaDeZap={setMetaDeZap}
+            setRenderizarFlashs={setRenderizarFlashs}
+            setValueSelect={setValueSelect}
+            flashs={flashs}
+          ></TelaInicial>
+        )}
+        {renderizarFlashs ? (
+          <ContainerCabecalho>
+            <img src={logo} alt="Logo do zaprecall"></img>
+            <h1>ZapRecall</h1>
+          </ContainerCabecalho>
+        ) : (
+          ""
+        )}
+        {flashs
+          .filter((f) => f.categoria === valueSelect)
+          .map((f, index) =>
+            renderizarFlashs ? (
+              <Flashcard
+                setNotificacao={setNotificacao}
+                valueSelect={valueSelect}
+                verificaMeta={verificaMeta}
+                setZapadas={setZapadas}
+                zapadas={zapadas}
+                fila={fila}
+                setFila={setFila}
+                lembradas={lembradas}
+                setLembradas={setLembradas}
+                habilitaBtnResposta={habilitaBtnResposta}
+                btnResposta={btnResposta}
+                setBtnResposta={setBtnResposta}
+                perguntaHabilitada={perguntaHabilitada}
+                setPerguntaHabilitada={setPerguntaHabilitada}
+                key={index}
+                pergunta={f.pergunta}
+                resposta={f.resposta}
+                categoria={f.categoria}
+                index={index}
+              />
+            ) : (
+              ""
+            )
           )}
-          {renderizarFlashs ? (
-            <ContainerCabecalho>
-              <img src={logo} alt="Logo do zaprecall"></img>
-              <h1>ZapRecall</h1>
-            </ContainerCabecalho>
-          ) : (
-            ""
-          )}
-          {flashs
-            .filter((f) => f.categoria === valueSelect)
-            .map((f, index) =>
-              renderizarFlashs ? (
-                <Flashcard
-                  setNotificacao={setNotificacao}
-                  valueSelect={valueSelect}
-                  verificaMeta={verificaMeta}
-                  setZapadas={setZapadas}
-                  zapadas={zapadas}
-                  fila={fila}
-                  setFila={setFila}
-                  lembradas={lembradas}
-                  setLembradas={setLembradas}
-                  habilitaBtnResposta={habilitaBtnResposta}
-                  btnResposta={btnResposta}
-                  setBtnResposta={setBtnResposta}
-                  perguntaHabilitada={perguntaHabilitada}
-                  setPerguntaHabilitada={setPerguntaHabilitada}
-                  key={index}
-                  pergunta={f.pergunta}
-                  resposta={f.resposta}
-                  categoria={f.categoria}
-                  index={index}
-                />
-              ) : (
-                ""
-              )
-            )}
-        </Home>
-
+      </Home>
 
       {renderizarFlashs ? (
         <Footer>
@@ -173,8 +194,6 @@ const ContainerCabecalho = styled.div`
   align-items: center;
   width: 300px;
 `;
-
-
 
 const Home = styled.div`
   width: 100%;
@@ -250,12 +269,12 @@ const EntradaNotificao = keyframes`
     right: -500px;
     transform: initial;
   }
-`
+`;
 
 const Notificacao = styled.div`
   width: 250px;
   height: 70px;
-  background-color: ${props => props.cor};
+  background-color: ${(props) => props.cor};
   color: white;
   position: relative;
   display: flex;
@@ -263,7 +282,7 @@ const Notificacao = styled.div`
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
-  top: ${props => props.posicao};
+  top: ${(props) => props.posicao};
   right: -1380px;
   border-radius: 8px;
   opacity: 1;
@@ -271,9 +290,7 @@ const Notificacao = styled.div`
   animation: ${EntradaNotificao} 3s backwards;
   box-sizing: border-box;
   padding: 15px;
-  `
-
-
+`;
 
 const Footer = styled.footer`
   position: fixed;
